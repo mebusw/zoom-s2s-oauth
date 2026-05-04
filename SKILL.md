@@ -1,6 +1,6 @@
 ---
 name: zoom-meetin-admin
-description: Zoom Meeting REST API call skills. When users need to manage Zoom meetings, they can directly call the Zoom Meeting "Server-to-Server OAuth" REST API (without using the MCP protocol). Applicable scenarios are (1) List/view/search/create/delete Zoom meetings, (2) Query cloud recordings, (3) Get user information, (4) Any Zoom REST API call. Trigger words includes "Zoom meeting", "Schedule a Zoom meeting", "Zoom meeting", "List meetings", "Scheduled a meeting".
+description: Zoom Meeting REST API call skills. When users need to manage Zoom meetings, they can directly call the Zoom Meeting "Server-to-Server OAuth" REST API (without using the MCP protocol). Applicable scenarios are (1) List/view/search/create/delete Zoom meetings, (2) Query cloud recordings, (3) Get user information, (4) Any Zoom REST API call. Trigger words includes "Zoom meeting", "Schedule a Zoom meeting", "View Zoom meeting", "List meetings", "Scheduled a meeting".
 ---
 
 # Zoom Server-to-Server OAuth REST API
