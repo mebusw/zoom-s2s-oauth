@@ -1,76 +1,79 @@
-# Zoom Server-to-Server OAuth REST API
+# SKILL of Zoom Server-to-Server OAuth REST API
 
-用 Server-to-Server OAuth 直接调 Zoom REST API，不需要 VPS，不需要 MCP 协议。
+Access Zoom REST API directly via Server-to-Server OAuth — no VPS required, no MCP protocol needed.
 
-## 配置步骤
+> EN | [中文](README.zh-cn.md)
 
-1. 需要先手动登录 https://marketplace.zoom.us/
-2. 在 "Develop" 下拉菜单选 "build app", 创建一个 `Server-to-Server OAuth`类型的APP
-3. 添加必要的OAuth Scope。
-4. 获取相关凭证密码
-5. 激活APP
-6. 在AI agent中调用此 SKILL
+## Setup Steps
 
-## 凭证配置
+1. Log in to https://marketplace.zoom.us/
+2. From the "Develop" dropdown, select "build app" and create an app of type `Server-to-Server OAuth`
+3. Add required OAuth Scopes
+4. Get the credentials
+5. Activate the app
+6. Invoke this SKILL in your AI agent
 
-编辑 `.env` 文件，填入你的 Zoom Server-to-Server OAuth App 凭证：
+## Credentials
+
+Edit the `.env` file with your Zoom Server-to-Server OAuth App credentials:
 
 ```env
-ZOOM_ACCOUNT_ID=你的AccountID
-ZOOM_CLIENT_ID=你的ClientID
-ZOOM_CLIENT_SECRET=你的ClientSecret
-ZOOM_USER_ID=你的用户邮箱或user_id
+ZOOM_ACCOUNT_ID=yourAccountID
+ZOOM_CLIENT_ID=yourClientID
+ZOOM_CLIENT_SECRET=yourClientSecret
+ZOOM_USER_ID=your_user_email_or_user_id
 ```
 
 
-## 需要的 OAuth Scope
+## Required OAuth Scopes
 
-在 Zoom Marketplace 你的 Server-to-Server OAuth App 里开通：
+Enable these in your Zoom Marketplace Server-to-Server OAuth App:
 
-| Scope | 用途 |
-|-------|------|
-| `meeting:read:list_meetings` | 列出会议 |
-| `meeting:write:create` | 创建会议 |
-| `meeting:write:delete` | 删除会议 |
-| `cloud_recording:read:list_user_recordings` | 查看云录像 |
-| `user:read:list_users` | 列出用户 |
-| `user:read:user` | 获取用户信息 |
+| Scope | Purpose |
+|-------|---------|
+| `meeting:read:list_meetings` | List meetings |
+| `meeting:write:create` | Create meetings |
+| `meeting:write:delete` | Delete meetings |
+| `cloud_recording:read:list_user_recordings` | View cloud recordings |
+| `user:read:list_users` | List users |
+| `user:read:user` | Get user info |
 
-## 快速开始
+## Quick Start
 
 ```bash
 cd ~/.agents/skills/zoom-s2s-oauth/scripts
 
-# 列出最近5个会议
+# List upcoming meetings
 python3 zoom-s2s.py list_meetings service@uperform.cn 5 upcoming
 
-# 创建会议 (start_time 格式: YYYY-MM-DDTHH:MM:SS)
-python3 zoom-s2s.py create_meeting "煎饼果子讨论会" "2026-05-05T10:00:00" 60 Asia/Shanghai
+# Create a meeting (start_time format: YYYY-MM-DDTHH:MM:SS)
+python3 zoom-s2s.py create_meeting "Pancake Discussion" "2026-05-05T10:00:00" 60 Asia/Shanghai
 
-# 获取云录像
+# Get cloud recordings
 python3 zoom-s2s.py recordings service@uperform.cn 10
 ```
 
-## 目录结构
+## Directory Structure
 
 ```
 zoom-s2s-oauth/
-├── SKILL.md           # AI Agent 调用说明
-├── README.md          # 本文件
-├── .env               # 凭证配置 (不要提交到 git!)
+├── SKILL.md           # AI Agent invocation guide
+├── README.md          # This file
+├── README.zh-cn.md    # 中文版
+├── .env               # Credentials (do NOT commit to git!)
 └── scripts/
-    └── zoom-s2s.py    # 主脚本 (纯 Python3，无外部依赖)
+    └── zoom-s2s.py    # Main script (pure Python3, no external dependencies)
 ```
 
 
-## 对比：MCP vs Server-to-Server REST
+## Comparison: MCP vs Server-to-Server REST
 
-| | MCP 方式 | Server-to-Server REST |
+| | MCP | Server-to-Server REST |
 |---|---|---|
-| 需要 VPS | ✅ 需要 (OAuth 回调) | ❌ 不需要 |
-| 协议 | MCP (JSON-RPC) | 标准 REST (Python 无外部依赖) |
+| Requires VPS | ✅ Yes (OAuth callback) | ❌ No |
+| Protocol | MCP (JSON-RPC) | Standard REST (pure Python, no deps) |
 | Token | User-Managed OAuth | Server-to-Server OAuth |
-| 复杂度 | 高 (代理+OAuth) | 低 (直接调) |
-| 功能 | Zoom MCP 工具集 | 所有 Zoom REST API |
+| Complexity | High (proxy+OAuth) | Low (direct call) |
+| Features | Zoom MCP tools | All Zoom REST API |
 
-如果你只需要调用 Zoom 会议/录像等核心功能，Server-to-Server REST 方式更简单。
+If you only need core Zoom meeting/recording features, Server-to-Server REST is simpler.

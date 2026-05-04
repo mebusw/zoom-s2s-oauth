@@ -1,13 +1,13 @@
 ---
 name: zoom-s2s-oauth
-description: Zoom Server-to-Server OAuth REST API 调用技能。当用户需要用 Zoom Server-to-Server OAuth App 直接调用 Zoom REST API（不走 MCP 协议）时触发。适用场景：(1) 列出/搜索/创建/删除 Zoom 会议，(2) 查询云录像，(3) 获取用户信息，(4) 任何 Zoom REST API 调用。触发词：Zoom、安排会议、zoom会议。
+description: Zoom meeting 的REST API 调用技能。当用户需要管理 Zoom meetings, 直接调用 Zoom meeting "Server-to-Server OAuth" 调用REST API（不走 MCP 协议）。适用场景：(1) 列出/查看/搜索/创建/删除 Zoom 会议，(2) 查询云录像，(3) 获取用户信息，(4) 任何 Zoom REST API 调用。触发词："Zoom meeting", "安排zoom会议", "zoom会议", "list meetings", "schedual a meeting".
 ---
 
 # Zoom Server-to-Server OAuth REST API
 
 ## 凭证配置
 
-在 `.env` 文件中配置：
+在 `.env` 文件中配置并查看凭证：
 
 ```env
 ZOOM_ACCOUNT_ID=你的AccountID
