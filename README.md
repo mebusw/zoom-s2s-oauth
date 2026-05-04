@@ -41,14 +41,14 @@ ZOOM_USER_ID=你的用户邮箱或user_id
 ```bash
 cd ~/.agents/skills/zoom-s2s-oauth/scripts
 
-# 列出最近会议
-./zoom-s2s.sh list_meetings service@uperform.cn 5 upcoming
+# 列出最近5个会议
+python3 zoom-s2s.py list_meetings service@uperform.cn 5 upcoming
 
 # 创建会议 (start_time 格式: YYYY-MM-DDTHH:MM:SS)
-./zoom-s2s.sh create_meeting "煎饼果子讨论会" "2026-05-05T10:00:00" 60 Asia/Shanghai
+python3 zoom-s2s.py create_meeting "煎饼果子讨论会" "2026-05-05T10:00:00" 60 Asia/Shanghai
 
 # 获取云录像
-./zoom-s2s.sh recordings service@uperform.cn 10
+python3 zoom-s2s.py recordings service@uperform.cn 10
 ```
 
 ## 目录结构
@@ -59,7 +59,7 @@ zoom-s2s-oauth/
 ├── README.md          # 本文件
 ├── .env               # 凭证配置 (不要提交到 git!)
 └── scripts/
-    └── zoom-s2s.sh    # 主脚本
+    └── zoom-s2s.py    # 主脚本 (纯 Python3，无外部依赖)
 ```
 
 
@@ -68,7 +68,7 @@ zoom-s2s-oauth/
 | | MCP 方式 | Server-to-Server REST |
 |---|---|---|
 | 需要 VPS | ✅ 需要 (OAuth 回调) | ❌ 不需要 |
-| 协议 | MCP (JSON-RPC) | 标准 REST |
+| 协议 | MCP (JSON-RPC) | 标准 REST (Python 无外部依赖) |
 | Token | User-Managed OAuth | Server-to-Server OAuth |
 | 复杂度 | 高 (代理+OAuth) | 低 (直接调) |
 | 功能 | Zoom MCP 工具集 | 所有 Zoom REST API |
