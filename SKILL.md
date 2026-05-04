@@ -1,6 +1,6 @@
 ---
-name: zoom-s2s-oauth
-description: Zoom meeting 的REST API 调用技能。当用户需要管理 Zoom meetings, 直接调用 Zoom meeting "Server-to-Server OAuth" 调用REST API（不走 MCP 协议）。适用场景：(1) 列出/查看/搜索/创建/删除 Zoom 会议，(2) 查询云录像，(3) 获取用户信息，(4) 任何 Zoom REST API 调用。触发词："Zoom meeting", "安排zoom会议", "zoom会议", "list meetings", "schedual a meeting".
+name: zoom-meetin-admin
+description: Zoom Meeting REST API call skills. When users need to manage Zoom meetings, they can directly call the Zoom Meeting "Server-to-Server OAuth" REST API (without using the MCP protocol). Applicable scenarios are (1) List/view/search/create/delete Zoom meetings, (2) Query cloud recordings, (3) Get user information, (4) Any Zoom REST API call. Trigger words includes "Zoom meeting", "Schedule a Zoom meeting", "Zoom meeting", "List meetings", "Scheduled a meeting".
 ---
 
 # Zoom Server-to-Server OAuth REST API

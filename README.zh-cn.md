@@ -1,6 +1,6 @@
 # SKILL of Zoom Server-to-Server OAuth REST API 
 
-用 Server-to-Server OAuth 直接调 Zoom REST API，不需要 VPS，不需要 MCP 协议。
+用 Server-to-Server OAuth 直接调 Zoom meeting REST API，不需要 VPS，不需要 MCP 协议，管理和安排ZOOM会议。
 
 > [EN](README.md) | 中文
 

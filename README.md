@@ -1,6 +1,6 @@
 # SKILL of Zoom Server-to-Server OAuth REST API
 
-Access Zoom REST API directly via Server-to-Server OAuth — no VPS required, no MCP protocol needed.
+Manage and schedule Zoom meetings REST API directly via Server-to-Server OAuth — no VPS required, no MCP protocol needed.
 
 > EN | [中文](README.zh-cn.md)
 
