@@ -94,9 +94,10 @@ def get_token():
         print("❌ Token 响应中无 access_token", file=sys.stderr)
         sys.exit(1)
 
-    # 缓存
+    # 缓存，并收紧文件权限（仅当前用户可读写）
     with open(TOKEN_CACHE, "w") as f:
         json.dump({"access_token": access_token, "expiry": time.time() + expires_in - 300}, f)
+    os.chmod(TOKEN_CACHE, 0o600)
 
     return access_token
 
@@ -180,7 +181,7 @@ def help():
   get_meeting     <meeting_id>                  获取单个会议详情
   create_meeting  <topic> <start_time> <duration> [timezone] [password]
                                                   创建会议 (start_time: YYYY-MM-DDTHH:MM:SS)
-  delete_meeting  <meeting_id>                  删除会议
+  delete_meeting  <meeting_id> --yes              删除会议（需 --yes 确认）
   get_user        [user_id]                     获取用户信息
   list_users      [page_size]                   列出账户下所有用户
   recordings      [user_id] [page_size]         获取云录像
@@ -236,6 +237,11 @@ def main():
     elif action == "delete_meeting":
         if len(args) < 1:
             print("❌ 需要 meeting_id", file=sys.stderr)
+            sys.exit(1)
+        if "--yes" not in args:
+            print(f"⚠️  即将删除会议 {args[0]}，此操作不可撤销。", file=sys.stderr)
+            print(f"   请添加 --yes 参数以确认执行，例如：", file=sys.stderr)
+            print(f"   python3 zoom-s2s.py delete_meeting {args[0]} --yes", file=sys.stderr)
             sys.exit(1)
         result = delete_meeting(args[0])
 

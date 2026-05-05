@@ -63,8 +63,29 @@ python3 zoom-s2s.py list_users [page_size]
 | 列出最近10个历史会议 | `list_meetings <user> 10 past` |
 | 创建明天10点会议 | `create_meeting "主题" "YYYY-MM-DDT10:00:00" 60 Asia/Shanghai` |
 | 获取会议详情 | `get_meeting <id>` |
-| 删除会议 | `delete_meeting <id>` |
+| 删除会议 | `delete_meeting <id> --yes` |
 | 获取云录像 | `recordings <user> 10` |
+
+## 最小权限配置建议
+
+根据实际使用场景按需开通 scope，不需要的功能不要授权：
+
+| 功能 | 所需 Scope | 建议 |
+|------|-----------|------|
+| 列出会议 | `meeting:read:list_meetings` | ✅ 核心 |
+| 查看会议详情 | `meeting:read:meeting` | ✅ 核心 |
+| 创建会议 | `meeting:write:create` | 按需开启 |
+| **删除会议** | `meeting:write:delete` | ⚠️ 谨慎开启 |
+| **读取云录像** | `cloud_recording:read:list_user_recordings` | ⚠️ 谨慎开启 |
+| **列出账户用户** | `user:read:list_users` | ⚠️ 谨慎开启 |
+
+> 建议为此 Skill 单独创建一个 Zoom Server-to-Server App，不要复用已有 App 的凭证。
+
+## Agent 调用规范
+
+- **创建会议前**：向用户确认主题、时间、时长，再执行。
+- **删除会议前**：必须向用户明确展示会议信息并获得确认，命令需附加 `--yes` 参数。
+- **禁止超范围调用**：仅允许文档中列出的 Action，不得构造任意 Zoom REST API 请求。
 
 ## 踩坑记录
 
