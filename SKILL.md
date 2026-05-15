@@ -87,22 +87,27 @@ python3 zoom-s2s.py list_users [page_size]
 - **删除会议前**：必须向用户明确展示会议信息并获得确认，命令需附加 `--yes` 参数。
 - **禁止超范围调用**：仅允许文档中列出的 Action，不得构造任意 Zoom REST API 请求。
 
-## 创建周期性会议（重要避坑）
+## 创建周期性会议
 
-创建 `type=8`（周期性）会议时，`recurrence` 参数有如下限制：
+创建 `type=8`（周期性会议）的 `recurrence` 参数说明：
 
-| recurrence.type | 说明 | 是否可用 |
-|---|---|---|
-| 1 | 每日循环（Daily） | ✅ 可用 |
-| 2 | 每周循环（Weekly）+ `weekly_days` | ❌ 总是返回 "Request Body should be a valid JSON object"（Zoom API 自身 bug） |
-| 3 | 每月循环（Monthly）+ `monthly_day` | ✅ 可用 |
+| recurrence.type | 说明 | 可用字段 | 是否可用 |
+|---|---|---|---|
+| 1 | 每日循环（Daily） | `end_date_time` 或 `count` | ✅ |
+| 2 | 每周循环（Weekly） | `weekly_days`（字符串）, `end_date_time` 或 `count` | ✅ |
+| 3 | 每月循环（Monthly） | `monthly_day` 或 `monthly_weeks` + `weekly_days` | ✅ |
 
-**变通方案**：当需要每周特定天数（如周六日）但 type=2 失败时，可以：
-- 用 type=1（每日循环）+ `end_date_time` 限定日期范围，覆盖目标日期
-- 或用 type=3（每月循环）+ `monthly_day` 指定某日（适用于固定日期）
-- 或直接创建多个单独会议（type=2）
+**⚠️ 关键避坑：`weekly_days` 必须是字符串，不是数组！**
 
-**示例**：创建 5月23日-24日（周六日）两天的周期性会议：
+| 错误写法 | 正确写法 |
+|---------|---------|
+| `"weekly_days": [6]` | `"weekly_days": "6"` |
+| `"weekly_days": ["6"]` | `"weekly_days": "6"`（单日） |
+|  | `"weekly_days": "6,0"`（多日，周六+周日） |
+
+**weekly_days 取值**：1=周一 ~ 7=周日
+
+**示例**：创建 5月23日-24日（周六日）的周期性会议：
 ```python
 payload = {
     "topic": "CSM公开课",
@@ -111,12 +116,23 @@ payload = {
     "duration": 540,
     "timezone": "Asia/Shanghai",
     "recurrence": {
-        "type": 1,                        # 每日循环
+        "type": 2,
         "repeat_interval": 1,
-        "end_date_time": "2026-05-24T00:00:00Z"  # 结束日期
+        "weekly_days": "6,0",   # 周六+周日，字符串！
+        "end_date_time": "2026-05-24T00:00:00Z"
     },
-    "settings": {"host_video": True, "participant_video": True, "join_before_host": False, "mute_upon_entry": False}
+    "settings": {
+        "host_video": True,
+        "participant_video": True,
+        "join_before_host": False,
+        "mute_upon_entry": False
+    }
 }
+```
+
+**多日示例**（周一+周三+周五）：
+```python
+"weekly_days": "1,3,5"
 ```
 
 ## 踩坑记录
@@ -124,4 +140,4 @@ payload = {
 1. **scope 错误 (4711)**：某些 API（如 `get_user`）需要在 App 里开通对应 scope，又如 `list_meetings` 需要在 App 里开通 `meeting:read:list_meetings` 权限
 2. **Token 有效期**：Server-to-Server Token 有效期 1 小时，脚本自动刷新并缓存
 3. **用户 ID**：可用邮箱，也可用 `list_users` 查 user_id
-4. **周期性会议 type=2 失败**：Zoom API 对 `recurrence.type=2`（每周循环）有 bug，任何包含 `weekly_days` 的请求都会返回 "Request Body should be a valid JSON object"，改用 type=1 或 type=3 变通
+4. **`weekly_days` 必须为字符串**：Zoom API 要求 `weekly_days` 是 `"6"` 这样的字符串，而非 `[6]` 数组，传数组会报 300 错误
